@@ -1,0 +1,12 @@
+{
+"cities": [
+    {
+        "name": "Київ",
+        "code": "Kyiv"
+    },
+    {
+        "name": "Харків",
+        "code": "Kharkiv"
+    }
+]
+}
