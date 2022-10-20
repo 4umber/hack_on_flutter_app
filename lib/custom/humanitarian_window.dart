@@ -39,16 +39,28 @@ class _HumanitarianWindowState extends State<HumanitarianWindow>
 
   Widget buildHumPoint(HumPoint point) {
     return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.zero,
       child: ExpansionTile(
+        textColor: Colors.black,
+        collapsedTextColor: Colors.black,
         title: Text(
           point.title,
-          style: const TextStyle(fontWeight: FontWeight.w700),
+          style: TextStyle(
+            fontSize: 16,
+          ),
         ),
         expandedAlignment: Alignment.centerLeft,
         children: <Widget>[
           Text(
             point.description,
-            style: const TextStyle(fontWeight: FontWeight.w700),
+            style: TextStyle(
+              fontSize: 14,
+            ),
           ),
         ],
       ),
@@ -60,30 +72,40 @@ class _HumanitarianWindowState extends State<HumanitarianWindow>
     super.build(context);
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              selectedCity.name,
-              style: TextStyle(fontWeight: FontWeight.w700),
-            ),
-            IconButton(
-              onPressed: () async {
-                var search_result = await showSearch(
-                  context: context,
-                  delegate: CitySearchDelegate(searchCities: cities),
-                );
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(19.0),
+            border: Border.all(color: Color.fromARGB(255, 237, 237, 237)),
+            // color: Colors.red,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                selectedCity.name,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              IconButton(
+                onPressed: () async {
+                  var search_result = await showSearch(
+                    context: context,
+                    delegate: CitySearchDelegate(searchCities: cities),
+                  );
 
-                if (search_result != null) {
-                  selectedCity = search_result;
-                  futureHumPoints =
-                      HumPointsProvider.getHumPoints(selectedCity.code);
-                  setState(() {});
-                }
-              },
-              icon: const Icon(Icons.search),
-            ),
-          ],
+                  if (search_result != null) {
+                    selectedCity = search_result;
+                    futureHumPoints =
+                        HumPointsProvider.getHumPoints(selectedCity.code);
+                    setState(() {});
+                  }
+                },
+                icon: const Icon(Icons.search),
+              ),
+            ],
+          ),
         ),
         Expanded(
           child: FutureBuilder<List<HumPoint>>(
