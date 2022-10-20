@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'custom/news_window.dart';
 import 'custom/tutorials_window.dart';
 import 'custom/humanitarian_window.dart';
@@ -33,8 +32,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   TabController? tabController;
-  final _prefs = SharedPreferences.getInstance();
-  String city = '';
   List<HumCity> cities = [];
 
   @override
@@ -55,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage>
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Довідник $city'),
+          title: Text('Довідник'),
           bottom: TabBar(
             isScrollable: true,
             indicator: BoxDecoration(
