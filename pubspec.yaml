@@ -39,6 +39,7 @@ dependencies:
   url_launcher: '6.1.6'
   shared_preferences: '2.0.15'
   http: ^0.13.5
+  fluttertoast: ^8.1.1
 
 dev_dependencies:
   flutter_test:
