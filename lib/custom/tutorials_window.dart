@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../providers/tutorials_provider.dart';
+import '../utils/error_toast.dart';
 
 class TutorialsWindow extends StatefulWidget {
   const TutorialsWindow({super.key});
@@ -13,6 +14,7 @@ class _TutorialsWindowState extends State<TutorialsWindow>
   int last_id = 0;
   late Future<List<Tutorial>> futureTutors;
   List<Tutorial> tutors = [];
+  late ErrorToast errToast;
 
   @override
   bool get wantKeepAlive => true;
@@ -22,6 +24,7 @@ class _TutorialsWindowState extends State<TutorialsWindow>
     super.initState();
     futureTutors = TutorialsProvider.getTutorials(last_id);
     // TODO: update last id
+    errToast = ErrorToast(context);
   }
 
   Card buildTutorial(Tutorial tutor) {
@@ -43,12 +46,24 @@ class _TutorialsWindowState extends State<TutorialsWindow>
   }
 
   Widget buildTutorsList() {
-    return ListView.builder(
-      itemCount: tutors.length,
-      itemBuilder: (context, index) {
-        return buildTutorial(tutors.elementAt(index));
-      },
-    );
+    Widget w;
+
+    if (tutors.isNotEmpty) {
+      w = ListView.builder(
+        itemCount: tutors.length,
+        itemBuilder: (context, index) {
+          return buildTutorial(tutors.elementAt(index));
+        },
+      );
+    } else {
+      w = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const <Widget>[
+          Text('Тут пусто :('),
+        ],
+      );
+    }
+    return w;
   }
 
   @override
@@ -60,11 +75,12 @@ class _TutorialsWindowState extends State<TutorialsWindow>
         if (snapshot.hasData) {
           tutors.insertAll(0, snapshot.data!);
           snapshot.data!.clear();
-          //return buildNewsList();
-        } /*else if (snapshot.hasError) {
-            return buildNewsList(); // Text('${snapshot.error}');
-          }*/
-        return buildTutorsList(); // const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          Future.delayed(Duration.zero, () {
+            errToast.showErrorToast('Помилка з\'єднання', 1);
+          });
+        }
+        return buildTutorsList();
       },
     );
   }
