@@ -4,6 +4,7 @@ import 'custom/news_window.dart';
 import 'custom/tutorials_window.dart';
 import 'custom/humanitarian_window.dart';
 import 'providers/cities_provider.dart';
+import 'utils/palette.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Palette.primaryWhite,
       ),
       home: MyHomePage(),
     );
@@ -56,16 +57,34 @@ class _MyHomePageState extends State<MyHomePage>
         appBar: AppBar(
           title: Text('Довідник $city'),
           bottom: TabBar(
+            isScrollable: true,
+            indicator: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                13.0,
+              ),
+              color: Colors.black,
+            ),
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.black,
             controller: tabController,
             tabs: <Widget>[
-              Tab(
-                text: 'Новини',
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                child: const Center(
+                  child: Text('Новини'),
+                ),
               ),
-              Tab(
-                text: 'Довідка',
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                child: const Center(
+                  child: Text('Довідка'),
+                ),
               ),
-              Tab(
-                text: 'Гумдопомога',
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                child: const Center(
+                  child: Text('Гумдопомога'),
+                ),
               ),
             ],
           ),
@@ -75,7 +94,9 @@ class _MyHomePageState extends State<MyHomePage>
           children: [
             const NewsWindow(),
             const TutorialsWindow(),
-            HumanitarianWindow(defaultCity: HumCity(code: 'Kyiv', name: 'Київ'),),
+            HumanitarianWindow(
+              defaultCity: HumCity(code: 'Kyiv', name: 'Київ'),
+            ),
           ],
         ),
       ),
