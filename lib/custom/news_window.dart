@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../providers/news_provider.dart';
+import '../utils/error_toast.dart';
 
 class NewsWindow extends StatefulWidget {
   const NewsWindow({super.key});
@@ -15,6 +16,7 @@ class _NewsWindowState extends State<NewsWindow>
   int last_id = 104;
   late Future<List<News>> futureNews;
   List<News> news = [];
+  late ErrorToast errToast;
 
   @override
   bool get wantKeepAlive => true;
@@ -24,6 +26,7 @@ class _NewsWindowState extends State<NewsWindow>
     super.initState();
     futureNews = NewsProvider.getNews(last_id);
     // TODO: update last id
+    errToast = ErrorToast(context);
   }
 
   swipeDownRefresh() {
@@ -50,12 +53,30 @@ class _NewsWindowState extends State<NewsWindow>
   }
 
   Widget buildNewsList() {
-    return ListView.builder(
-      itemCount: news.length,
-      itemBuilder: (context, index) {
-        return buildNews(news.elementAt(index));
-      },
-    );
+    Widget w;
+
+    if (news.isNotEmpty) {
+      w = ListView.builder(
+        itemCount: news.length,
+        itemBuilder: (context, index) {
+          return buildNews(news.elementAt(index));
+        },
+      );
+    } else {
+      w = Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          ListView(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const <Widget>[
+              Text('Тут пусто :('),
+            ],
+          ),
+        ],
+      );
+    }
+    return w;
   }
 
   @override
@@ -69,11 +90,12 @@ class _NewsWindowState extends State<NewsWindow>
             news.insertAll(0, snapshot.data!);
             snapshot.data!.clear();
             // TODO: update last id
-            //return buildNewsList();
-          } /*else if (snapshot.hasError) {
-            return buildNewsList(); // Text('${snapshot.error}');
-          }*/
-          return buildNewsList(); // const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            Future.delayed(Duration.zero, () {
+              errToast.showErrorToast('Помилка з\'єднання', 1);
+            });
+          }
+          return buildNewsList();
         },
       ),
       onRefresh: () async {
