@@ -23,7 +23,6 @@ class _TutorialsWindowState extends State<TutorialsWindow>
   void initState() {
     super.initState();
     futureTutors = TutorialsProvider.getTutorials(last_id);
-    // TODO: update last id
     errToast = ErrorToast(context);
   }
 
@@ -85,8 +84,12 @@ class _TutorialsWindowState extends State<TutorialsWindow>
       future: futureTutors,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          tutors.insertAll(0, snapshot.data!);
-          snapshot.data!.clear();
+          if (snapshot.data!.isNotEmpty) {
+              tutors.insertAll(0, snapshot.data!);
+              final max = snapshot.data!.reduce((curr, next) => curr.id > next.id? curr: next);
+              snapshot.data!.clear();
+              last_id = max.id;
+            }
         } else if (snapshot.hasError) {
           Future.delayed(Duration.zero, () {
             errToast.showErrorToast('Помилка з\'єднання', 1);

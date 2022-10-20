@@ -21,7 +21,7 @@ class TutorialsProvider {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       print(jsonData);
       for (var n in jsonData['content']) {
-        tutors.add(Tutorial(title: n['title'], description: n['descript'], id: 0)); // TODO: ID
+        tutors.add(Tutorial(title: n['title'], description: n['descript'], id: n['id']));
       }
       return tutors;
     } else {
