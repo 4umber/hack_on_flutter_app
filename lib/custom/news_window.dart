@@ -37,10 +37,13 @@ class _NewsWindowState extends State<NewsWindow>
 
   Card buildNews(News news) {
     return Card(
+      margin: EdgeInsets.all(1),
       child: ListTile(
         title: Text(
           news.title,
-          style: const TextStyle(fontWeight: FontWeight.w700),
+          style: TextStyle(
+            fontSize: 16,
+          ),
         ),
         onTap: () async {
           var uri = Uri.parse(news.link);
@@ -83,6 +86,7 @@ class _NewsWindowState extends State<NewsWindow>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
+      color: Colors.black,
       child: FutureBuilder<List<News>>(
         future: futureNews,
         builder: (context, snapshot) {
