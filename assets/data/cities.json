@@ -7,6 +7,30 @@
     {
         "name": "Харків",
         "code": "Kharkiv"
+    },
+    {
+        "name": "Одеса",
+        "code": "Odesa"
+    },
+    {
+        "name": "Житомир",
+        "code": "Zhytomyr"
+    },
+    {
+        "name": "Вінниця",
+        "code": "Vinnytsia"
+    },
+    {
+        "name": "Черкаси",
+        "code": "Cherkasy"
+    },
+    {
+        "name": "Чернівці",
+        "code": "Chernivtsi"
+    },
+    {
+        "name": "Львів",
+        "code": "Lviv"
     }
 ]
 }
