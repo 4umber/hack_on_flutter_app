@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../providers/hum_points_provider.dart';
 import '../providers/cities_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import '../utils/error_toast.dart';
 
 class HumanitarianWindow extends StatefulWidget {
   const HumanitarianWindow({super.key, required this.defaultCity});
@@ -17,6 +18,7 @@ class _HumanitarianWindowState extends State<HumanitarianWindow>
   late Future<List<HumPoint>> futureHumPoints;
   List<HumCity> cities = [];
   HumCity selectedCity = HumCity(name: '', code: '');
+  late ErrorToast errToast;
 
   @override
   bool get wantKeepAlive => true;
@@ -32,6 +34,7 @@ class _HumanitarianWindowState extends State<HumanitarianWindow>
     selectedCity = widget.defaultCity;
     loadCitiesJson();
     futureHumPoints = HumPointsProvider.getHumPoints(selectedCity.code);
+    errToast = ErrorToast(context);
   }
 
   Widget buildHumPoint(HumPoint point) {
@@ -94,7 +97,15 @@ class _HumanitarianWindowState extends State<HumanitarianWindow>
                   },
                 );
               } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
+                Future.delayed(Duration.zero, () {
+                  errToast.showErrorToast('Помилка з\'єднання', 1);
+                });
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const <Widget>[
+                    Text('Тут пусто :('),
+                  ],
+                );
               }
               return const CircularProgressIndicator();
             },
