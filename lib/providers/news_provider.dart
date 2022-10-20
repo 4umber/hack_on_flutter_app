@@ -23,6 +23,7 @@ class NewsProvider {
       for (var n in jsonData['content']) {
         news.add(News(title: n['title'], link: n['link'], id: n['id']));
       }
+      news.sort((a, b) => b.id.compareTo(a.id));
       return news;
     } else {
       throw Exception('Failed to load news');
