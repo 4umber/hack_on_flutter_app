@@ -12,8 +12,7 @@ class NewsWindow extends StatefulWidget {
 
 class _NewsWindowState extends State<NewsWindow>
     with AutomaticKeepAliveClientMixin {
-  //List<Widget> news = [];
-  int last_id = 104;
+  int last_id = 0;
   late Future<List<News>> futureNews;
   List<News> news = [];
   late ErrorToast errToast;
@@ -25,13 +24,10 @@ class _NewsWindowState extends State<NewsWindow>
   void initState() {
     super.initState();
     futureNews = NewsProvider.getNews(last_id);
-    // TODO: update last id
     errToast = ErrorToast(context);
   }
 
   swipeDownRefresh() {
-    //news.insert(0, buildNews(index));
-    //index++;
     futureNews = NewsProvider.getNews(last_id);
   }
 
@@ -91,9 +87,12 @@ class _NewsWindowState extends State<NewsWindow>
         future: futureNews,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            news.insertAll(0, snapshot.data!);
-            snapshot.data!.clear();
-            // TODO: update last id
+            if (snapshot.data!.isNotEmpty) {
+              news.insertAll(0, snapshot.data!);
+              final max = snapshot.data!.reduce((curr, next) => curr.id > next.id? curr: next);
+              snapshot.data!.clear();
+              last_id = max.id;
+            }
           } else if (snapshot.hasError) {
             Future.delayed(Duration.zero, () {
               errToast.showErrorToast('Помилка з\'єднання', 1);

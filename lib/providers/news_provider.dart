@@ -21,7 +21,7 @@ class NewsProvider {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       print(jsonData);
       for (var n in jsonData['content']) {
-        news.add(News(title: n['title'], link: n['link'], id: 0)); // TODO: ID
+        news.add(News(title: n['title'], link: n['link'], id: n['id']));
       }
       return news;
     } else {
