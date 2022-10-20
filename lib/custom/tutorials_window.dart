@@ -29,16 +29,28 @@ class _TutorialsWindowState extends State<TutorialsWindow>
 
   Card buildTutorial(Tutorial tutor) {
     return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.zero,
       child: ExpansionTile(
+        textColor: Colors.black,
+        collapsedTextColor: Colors.black,
         title: Text(
           tutor.title,
-          style: const TextStyle(fontWeight: FontWeight.w700),
+          style: TextStyle(
+            fontSize: 16,
+          ),
         ),
         expandedAlignment: Alignment.centerLeft,
         children: <Widget>[
           Text(
             tutor.description,
-            style: const TextStyle(fontWeight: FontWeight.w700),
+            style: TextStyle(
+            fontSize: 14,
+          ),
           ),
         ],
       ),
